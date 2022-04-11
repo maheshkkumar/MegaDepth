@@ -1,22 +1,32 @@
+import os
+import sys
+
 import numpy as np
 import torch
-import os
 from torch.autograd import Variable
+
 from .base_model import BaseModel
-import sys
-import pytorch_DIW_scratch
+from .pytorch_DIW_scratch import pytorch_DIW_scratch
+
 
 class HGModel(BaseModel):
     def name(self):
         return 'HGModel'
 
-    def __init__(self, opt):
+    def __init__(self, opt, weights=None):
         BaseModel.initialize(self, opt)
 
         print("===========================================LOADING Hourglass NETWORK====================================================")
-        model = pytorch_DIW_scratch.pytorch_DIW_scratch
-        model= torch.nn.parallel.DataParallel(model, device_ids = [0,1])
-        model_parameters = self.load_network(model, 'G', 'best_vanila')
+        model = pytorch_DIW_scratch
+        model= torch.nn.parallel.DataParallel(model, device_ids = [0])
+
+        # Mahesh: added weights parameter to load pre-trained weights
+        if weights is not None:
+            print("Loading weights from ", weights)
+            model_parameters = self.load_network(model, 'G', 'best_generalization')
+        else:
+            model_parameters = self.load_network(model, 'G', 'best_vanila')
+
         model.load_state_dict(model_parameters)
         self.netG = model.cuda()
 

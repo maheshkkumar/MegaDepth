@@ -1,5 +1,7 @@
 import os
+
 import torch
+
 
 class BaseModel():
     def name(self):
