@@ -16,13 +16,13 @@ class HGModel(BaseModel):
     def __init__(self, opt, weights=None):
         BaseModel.initialize(self, opt)
 
-        print("===========================================LOADING Hourglass NETWORK====================================================")
+        # print("===========================================LOADING Hourglass NETWORK====================================================")
         model = pytorch_DIW_scratch
         model= torch.nn.parallel.DataParallel(model, device_ids = [0])
 
         # Mahesh: added weights parameter to load pre-trained weights
         if weights is not None:
-            print("Loading weights from ", weights)
+            # print("Loading weights from ", weights)
             model_parameters = self.load_network(model, 'G', 'best_generalization')
         else:
             model_parameters = self.load_network(model, 'G', 'best_vanila')

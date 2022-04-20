@@ -25,7 +25,7 @@ class Megadepth():
         input_img =  torch.from_numpy( np.transpose(img, (2,0,1)) ).contiguous().float()
         input_img = input_img.unsqueeze(0)
 
-        input_images = Variable(input_img.to(device) )
+        input_images = Variable(input_img.to(device))
         pred_log_depth = self.model.netG.forward(input_images)
         pred_log_depth = torch.squeeze(pred_log_depth)
         pred_depth = torch.exp(pred_log_depth)
